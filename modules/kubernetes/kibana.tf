@@ -1,13 +1,15 @@
-variable "kibana_name" {
-  default = "kibana"
+locals {
+  kibana = {
+    name    = "kibana"
+  }
 }
 
-resource "kubernetes_service" "service-kibana" {
+resource "kubernetes_service" "kibana-service" {
   metadata {
-    name = var.kibana_name
+    name = "${local.kibana.name}-svc"
     namespace = kubernetes_namespace.ns_logs.metadata[0].name
     labels = {
-        "app": var.kibana_name
+        "app": local.kibana.name
     }
   }
   spec {
@@ -18,32 +20,73 @@ resource "kubernetes_service" "service-kibana" {
     }
 
     selector = {
-      "app" = var.kibana_name
+      "app" = local.kibana.name
+    }
+  }
+}
+
+resource "kubernetes_ingress_v1" "ingress-kibana" {
+  wait_for_load_balancer = true
+  metadata {
+    name = "${local.kibana.name}-ingress"
+    namespace = kubernetes_namespace.ns_logs.metadata[0].name
+    annotations = {
+      "kubernetes.io/ingress.class" = "nginx"
+    }
+  }
+  spec {
+    
+    # tls {
+    #   hosts = [
+    #     "${var.stage}.${local.kibana.name}.${local.kibana.domain}"
+    #   ]
+    # }
+
+    rule {
+      host = "${var.stage}.${local.kibana.name}.${digitalocean_domain.domain.name}"
+      http {
+        path {
+          path = "/"
+          backend {
+            service {
+              name = "${local.kibana.name}-svc"
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
 
 resource "kubernetes_deployment" "deployment-kibana" {
   metadata {
-    name = var.kibana_name
+    name = local.kibana.name
     namespace = kubernetes_namespace.ns_logs.metadata[0].name
+    labels = {
+      "app" = local.kibana.name
+    }
   }
+
   spec {
     replicas = 1
+
     selector {
       match_labels = {
-        "app" = var.kibana_name
+        "app" = local.kibana.name
       }
     }
     template {
       metadata {
         labels = {
-          "app" = var.kibana_name
+          "app" = local.kibana.name
         }
       }
       spec {
         container {
-          name = var.kibana_name
+          name = local.kibana.name
           image = "docker.elastic.co/kibana/kibana:7.2.0"
           resources {
             limits = {
@@ -64,4 +107,13 @@ resource "kubernetes_deployment" "deployment-kibana" {
       }
     }
   }
+}
+
+resource "digitalocean_record" "www-kibana" {
+  domain = digitalocean_domain.domain.name
+  type = "A"
+  name = "${var.stage}.${local.kibana.name}"
+  ttl = 30
+  
+  value = kubernetes_ingress_v1.ingress-kibana.status.0.load_balancer.0.ingress.0.ip
 }

@@ -32,6 +32,7 @@ module "kubernetes" {
   source = ".//modules/kubernetes"
   digitalocean_token = var.digitalocean_token
 
+  stage = var.stage
   domain_name = var.domain_name
   kubernetes_config = module.digitalocean.kubernetes_config
 }

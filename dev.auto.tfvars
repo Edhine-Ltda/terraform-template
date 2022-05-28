@@ -2,7 +2,7 @@
 stage = "dev"
 
 # DIGITAL OCEAN
-domain_name =  "dev.edhine.cl"
+domain_name =  "edhine.cl"
 
 # GITHUB
 owner = "Edhine-Ltda"
@@ -12,4 +12,4 @@ name_cluster = "edhine-autoscale-worker-pool"
 size = "s-2vcpu-2gb"
 autoscale = true
 min_nodes = 1
-max_nodes = 1
+max_nodes = 2

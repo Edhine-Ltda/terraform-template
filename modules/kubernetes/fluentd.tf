@@ -1,22 +1,24 @@
-variable "fluentd_name" {
-  default = "fluentd"
+locals {
+  fluentd = {
+    name = "fluentd"
+  }
 }
 
 resource "kubernetes_service_account" "service-account-fluentd" {
   metadata {
-    name      = var.fluentd_name
+    name      = local.fluentd.name
     namespace = kubernetes_namespace.ns_logs.metadata[0].name
     labels = {
-      "app" = var.fluentd_name
+      "app" = local.fluentd.name
     }
   }
 }
 
 resource "kubernetes_cluster_role" "cluster-role-fluentd" {
   metadata {
-    name = var.fluentd_name
+    name = local.fluentd.name
     labels = {
-      "app" = var.fluentd_name
+      "app" = local.fluentd.name
     }
   }
   rule {
@@ -35,53 +37,53 @@ resource "kubernetes_cluster_role" "cluster-role-fluentd" {
 
 resource "kubernetes_cluster_role_binding" "cluster-role-binding-fluentd" {
   metadata {
-    name = var.fluentd_name
+    name = local.fluentd.name
   }
 
   role_ref {
     kind      = "ClusterRole"
-    name      = var.fluentd_name
+    name      = local.fluentd.name
     api_group = "rbac.authorization.k8s.io"
   }
 
   subject {
     kind      = "ServiceAccount"
-    name      = var.fluentd_name
+    name      = local.fluentd.name
     namespace = kubernetes_namespace.ns_logs.metadata[0].name
   }
 }
 
 resource "kubernetes_daemonset" "daemonset-fluentd" {
   metadata {
-    name      = var.fluentd_name
+    name      = local.fluentd.name
     namespace = kubernetes_namespace.ns_logs.metadata[0].name
     labels = {
-      "app" = var.fluentd_name
+      "app" = local.fluentd.name
     }
   }
 
   spec {
     selector {
       match_labels = {
-        "app" = var.fluentd_name
+        "app" = local.fluentd.name
       }
     }
 
     template {
       metadata {
         labels = {
-          "app" = var.fluentd_name
+          "app" = local.fluentd.name
         }
       }
       spec {
 
-        service_account_name = var.fluentd_name
+        service_account_name = local.fluentd.name
         toleration {
           key    = "node-role.kubernetes.io/master"
           effect = "NoSchedule"
         }
         container {
-          name  = var.fluentd_name
+          name  = local.fluentd.name
           image = "fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1"
 
           env {
@@ -152,5 +154,4 @@ resource "kubernetes_daemonset" "daemonset-fluentd" {
       }
     }
   }
-
 }

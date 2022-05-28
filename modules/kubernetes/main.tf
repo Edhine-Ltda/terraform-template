@@ -17,3 +17,7 @@ provider "kubernetes" {
 provider "digitalocean" {
   token = var.digitalocean_token
 }
+
+resource "digitalocean_domain" "domain" {
+  name = var.domain_name
+}

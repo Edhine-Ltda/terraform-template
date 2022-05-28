@@ -15,3 +15,8 @@ variable "domain_name" {
   default = "domain name root"
   type = string
 }
+
+variable "stage" {
+  default = "nombre ambiente"
+  type = string
+}
