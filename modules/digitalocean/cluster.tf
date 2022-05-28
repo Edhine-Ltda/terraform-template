@@ -1,14 +1,14 @@
 resource "digitalocean_kubernetes_cluster" "edhine-cluster" {
-  name    = "edhine-cluster"
-  region  = "nyc1"
-  version = "1.22.8-do.1"
+  name    = "${var.stage}-${var.k8s_name_cluster}"
+  region  = var.k8s_region
+  version = var.k8s_version
 
   node_pool {
-    name       = "edhine-autoscale-worker-pool"
-    size       = "s-2vcpu-2gb"
-    auto_scale = true
-    min_nodes  = 1
-    max_nodes  = 1
+    name       = "${var.stage}-${var.k8s_name_cluster}-worker-pool"
+    size       = var.k8s_size
+    auto_scale = var.k8s_autoscale
+    min_nodes  = var.k8s_min_nodes
+    max_nodes  = var.k8s_max_nodes
   }
 }
 

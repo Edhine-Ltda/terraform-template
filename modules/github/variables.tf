@@ -3,7 +3,7 @@ variable "github_token" {
     type = string
 }
 
-variable "owner" {
+variable "gh_owner" {
     description = "Name Organization"
     type = string
 }

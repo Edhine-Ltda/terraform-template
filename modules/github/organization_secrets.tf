@@ -1,5 +1,5 @@
 data "github_repository" "repo" {
-  full_name = "${var.owner}/hairdressing-angular-front"
+  full_name = "${var.gh_owner}/hairdressing-angular-front"
 }
 
 resource "github_actions_organization_secret" "org_digitalocean_token" {

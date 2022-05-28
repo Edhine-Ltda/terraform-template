@@ -15,14 +15,16 @@ variable "digitalocean_token" {} #
 variable "stage" {}
 
 # Digital Ocean
-variable "domain_name" {}
+variable "do_domain_name" {}
 
 # Github
-variable "owner" {}
+variable "gh_owner" {}
 
 # Kubernetes
-variable "name_cluster" {}
-variable "size" {}
-variable "autoscale" {}
-variable "min_nodes" {}
-variable "max_nodes" {}
+variable "k8s_name_cluster" {}
+variable "k8s_size" {}
+variable "k8s_autoscale" {}
+variable "k8s_min_nodes" {}
+variable "k8s_max_nodes" {}
+variable "k8s_version" {}
+variable "k8s_region" {}

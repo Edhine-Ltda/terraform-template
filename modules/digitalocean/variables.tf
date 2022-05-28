@@ -3,31 +3,37 @@ variable "digitalocean_token" {
     type = string
 }
 
-variable "name_cluster" {
+variable "stage" {
+  description = "Ambiente"
+}
+
+variable "k8s_version" {
+    description = "version cluster"
+}
+
+variable "k8s_region" {
+    description = "Region del cluster"
+}   
+
+variable "k8s_name_cluster" {
   description = "Nombre cluster kubernetes"
-  type = string
 }
 
-variable "size" {
+variable "k8s_size" {
     description = "ID del tamaño del cluster"
-    type = string
-    default = "s-2vcpu-2gb"
 }
 
-variable "autoscale" {
+variable "k8s_autoscale" {
     description = ""
     type = bool
-    default = true
 }
 
-variable "min_nodes" {
+variable "k8s_min_nodes" {
     description = "Minimo de nodos del cluster"
     type = number
-    default = 1
 }
 
-variable "max_nodes" {
+variable "k8s_max_nodes" {
     description = "Maximo de nodos del cluster"
     type = number
-    default = 1
 }

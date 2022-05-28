@@ -19,5 +19,5 @@ provider "digitalocean" {
 }
 
 resource "digitalocean_domain" "domain" {
-  name = var.domain_name
+  name = var.do_domain_name
 }

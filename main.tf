@@ -12,11 +12,14 @@ module "digitalocean" {
   source = ".//modules/digitalocean"
   digitalocean_token = var.digitalocean_token
 
-  name_cluster = var.name_cluster
-  size = var.size
-  autoscale = var.autoscale
-  min_nodes = var.min_nodes
-  max_nodes = var.max_nodes
+  stage = var.stage
+  k8s_region = var.k8s_region
+  k8s_version = var.k8s_version
+  k8s_name_cluster = var.k8s_name_cluster
+  k8s_size = var.k8s_size
+  k8s_autoscale = var.k8s_autoscale
+  k8s_min_nodes = var.k8s_min_nodes
+  k8s_max_nodes = var.k8s_max_nodes
 }
 
 module "github" {
@@ -24,8 +27,8 @@ module "github" {
   github_token = var.github_token
   digitalocean_token = var.digitalocean_token
   
-  owner = var.owner
-  digitalocean_cluster_name = var.name_cluster
+  gh_owner = var.gh_owner
+  digitalocean_cluster_name = module.digitalocean.cluster_name
 }
 
 module "kubernetes" {
@@ -33,7 +36,7 @@ module "kubernetes" {
   digitalocean_token = var.digitalocean_token
 
   stage = var.stage
-  domain_name = var.domain_name
+  do_domain_name = var.do_domain_name
   kubernetes_config = module.digitalocean.kubernetes_config
 }
 

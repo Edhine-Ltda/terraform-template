@@ -11,7 +11,7 @@ variable "digitalocean_token" {
   type = string
 }
 
-variable "domain_name" {
+variable "do_domain_name" {
   default = "domain name root"
   type = string
 }
