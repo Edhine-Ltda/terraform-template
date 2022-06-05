@@ -21,3 +21,12 @@ provider "digitalocean" {
 resource "digitalocean_domain" "domain" {
   name = var.do_domain_name
 }
+
+resource "digitalocean_record" "www-public-api" {
+  domain = digitalocean_domain.domain.name
+  type = "A"
+  name = "${var.stage}.public-api"
+  ttl = 30
+  
+  value = kubernetes_ingress_v1.ingress-app.status.0.load_balancer.0.ingress.0.ip
+}

@@ -1,0 +1,18 @@
+# GLOBAL
+stage = "develop"
+
+# DIGITAL OCEAN
+do_domain_name =  "edhine.cl"
+
+# GITHUB
+gh_owner = "Edhine-Ltda"
+
+#KUBERNETES
+k8s_region = "nyc1"
+k8s_version = "1.22.8-do.1"
+k8s_name_cluster = "edhine-cluster"
+k8s_size = "s-2vcpu-2gb"
+k8s_autoscale = true
+k8s_min_nodes = 1
+k8s_max_nodes = 2
+
